@@ -1,0 +1,38 @@
+{
+    "name": "youloge.editor",
+    "title": "Youloge.Editor",
+    "description": "基于UEditor定制编辑器",
+    "version": "2.2.9",
+    "homepage": "http://docs.youloge.com/editor",
+    "author": {
+        "name": "11247005@qq.com",
+        "url": "http://docs.youloge.com"
+    },
+    "scripts": {
+        "dev": "cd ./dist && http-server",
+        "build": "grunt default"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/youfeed/youloge.editor"
+    },
+    "keywords": [
+        "ueditor",
+        "web editor",
+        "javascript",
+        "rich editor"
+    ],
+    "bugs": {
+        "url": "https://github.com/youfeed/youloge.editor/issues"
+    },
+    "dependencies": {
+        "grunt": "^1.6.1",
+        "grunt-contrib-clean": "^2.0.1",
+        "grunt-contrib-concat": "^2.1.0",
+        "grunt-contrib-copy": "^1.0.0",
+        "grunt-contrib-cssmin": "^5.0.0",
+        "grunt-contrib-uglify": "^5.2.2",
+        "grunt-text-replace": "^0.4.0",
+        "grunt-transcoding": "^0.1.3"
+    }
+}

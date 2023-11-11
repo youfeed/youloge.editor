@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>外链</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="../internal.js"></script>
+    <style type="text/css">
+        *{margin:0;padding:0;color: #838383;box-sizing: border-box; }
+        table{font-size: 12px;margin: 10px;line-height: 30px}
+        .txt{width:300px;height:21px;line-height:21px;border:1px solid #d7d7d7;}
+        main{font-size: 12px;margin: 10px;}
+    </style>
+</head>
+<body>
+    <main>
+        <div>
+            <div style=" height: 40px; box-shadow: 0 0 3px #ccc; ">
+                <input type="url" id="link" placeholder="支持任何协议URL..." style=" width: 100%; height: 100%; padding: 3px; border-radius: 5px; outline: 0; border: 0;"/>
+            </div>
+            <div>
+                <div style=" display: flex; align-items: center; justify-content: space-between; height: 40px; ">
+                    <div>外链解析： <span id="uuid"></span></div>
+                    <div>
+                        <a href="https://docs.youloge.com/editor/link" target="_blank">查看文档</a>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div id="message" style=" margin: 10px; color: #FF9800; font-size: 14px; "></div>
+    </footer>
+
+<script type="text/javascript">
+    var range = editor.selection.getRange(),LINKURL = editor.getOpt('LINKURL'),
+        link = range.collapsed ? editor.queryCommandValue( "link" ) : editor.selection.getStart(),title,
+        rangeLink = domUtils.findParentByTagName(range.getCommonAncestor(),'a',true),timer = null;
+    link = domUtils.findParentByTagName( link, "a", true );
+    if(link){
+        url = utils.html(link.getAttribute( '_href' ));
+        title = link.getAttribute( 'title' )
+    }
+
+    let message = document.querySelector('#message'),elem = document.querySelector('#link');elem.focus();
+    elem.value = title ? title : '';
+    const showMsg = (msg)=>{
+        message.innerHTML = msg
+        message.animate([{transform: "translate3d(0, -2px, 0)",background: '#f2f2f2'},{transform: "translate3d(0, 2px, 0)",background: '#f1f1f1'}],{duration:50,iterations:5})
+        clearTimeout(timer);timer = setTimeout(()=>{
+            message.innerHTML = ''
+        },6000)
+    }
+    // 跳转URL必须为：LINKURL
+    // 检测URL
+    const parseUrl = (link)=>{
+        try {
+            var urls = new URL(link);
+        } catch (error) {
+            showMsg('检测URL 不通过');
+        }
+        return urls ? true : false;
+    }
+    // 检测URL 有变化 清空 herf
+    elem.onblur = (e)=>{
+        parseUrl(elem.value)
+        link._href = ''
+    };
+    // 异步中转
+    dialog.onok = ()=>{
+        let value = elem.value
+        if(!parseUrl(value)){
+            showMsg('链接不正确：需要有`协议`,`路径`,`参数`')
+            return false
+        }
+        showMsg('申请外链......')
+        let genRequest = editor.genRequest('material','link',{href:'https://fex.baidu.com/ueditor/#dev-request_specification'},true);
+        fetch(...genRequest).then(res=>res.json()).then(({err,msg,data})=>{
+            err == 200 ? (
+                obj = {
+                    'href':`${LINKURL}${data.uuid}`,
+                    'target' : "_blank",
+                    'title' : value
+                },
+                editor.execCommand('link',utils.clearEmptyAttrs(obj) ),dialog.close()
+            ) : showMsg(msg)
+        }).catch(err=>{
+            showMsg('链接跳转服务不可用')
+        }).finally(()=>{
+            
+        })
+        return false
+    };
+</script>
+</body>
+</html>
