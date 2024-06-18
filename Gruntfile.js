@@ -118,7 +118,7 @@ module.exports = function (grunt) {
             demo: {
                 files: [
                     {
-                        src: '_examples/completeDemo.html',
+                        src: '_examples/index.html',
                         dest: disDir + 'index.html'
                     }
                 ]
@@ -127,27 +127,6 @@ module.exports = function (grunt) {
 
                 expand: true,
                 src: 'php/**',
-                dest: disDir
-
-            },
-            asp: {
-
-                expand: true,
-                src: 'asp/**',
-                dest: disDir
-
-            },
-            jsp: {
-
-                expand: true,
-                src: 'jsp/**',
-                dest: disDir
-
-            },
-            net: {
-
-                expand: true,
-                src: 'net/**',
                 dest: disDir
 
             }
@@ -186,16 +165,6 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            gbkasp: {
-                src: [ disDir + 'asp/*.asp' ],
-                overwrite: true,
-                replacements: [
-                    {
-                        from: /65001/gi,
-                        to: '936'
-                    }
-                ]
-            }
 
         },
         clean: {

@@ -4,13 +4,13 @@
     "description": "基于UEditor定制编辑器",
     "version": "2.2.9",
     "homepage": "http://docs.youloge.com/editor",
-    "author": {
-        "name": "11247005@qq.com",
-        "url": "http://docs.youloge.com"
-    },
     "scripts": {
         "dev": "cd ./dist && http-server",
         "build": "grunt default"
+    },
+    "author": {
+        "name": "11247005@qq.com",
+        "url": "http://docs.youloge.com"
     },
     "repository": {
         "type": "git",
