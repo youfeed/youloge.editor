@@ -1,7 +1,5 @@
 'use strict';
-
 module.exports = function (grunt) {
-
     var fs = require("fs"),
         Util = {
 
@@ -36,16 +34,13 @@ module.exports = function (grunt) {
                 return src;
 
             }
-
         },
         packageJson = grunt.file.readJSON('package.json'),
         server = grunt.option('server') || 'php',
         encode = grunt.option('encode') || 'utf8',
         disDir = "dist/",
         banner = '/*!\n * ' + packageJson.name + '\n * version: ' + packageJson.version + '\n * build: <%= new Date() %>\n */\n\n';
-
     //init 不处理 disDir
-
     grunt.initConfig({
         pkg: packageJson,
         concat: {
@@ -91,14 +86,14 @@ module.exports = function (grunt) {
         uglify: {
             dist: {
                 options: {
-                    banner: '/*!\n * ' + packageJson.name + '\n * version: ' + packageJson.version + '\n * build: <%= new Date() %>\n */'
+                    banner: `/*!\n * ${packageJson.name}\n  * version: ${packageJson.version} \n * build: <%= new Date() %>\n */`
                 },
                 src: disDir + '<%= pkg.name %>.all.js',
                 dest: disDir + '<%= pkg.name %>.all.min.js'
             },
             parse: {
                 options: {
-                    banner: '/*!\n * ' + packageJson.name + ' parse\n * version: ' + packageJson.version + '\n * build: <%= new Date() %>\n */'
+                    banner: `/*!\n * ${packageJson.name} parse\n * version: ${packageJson.version}\n * build: <%= new Date() %>\n */`
                 },
                 src: disDir + '<%= pkg.name %>.parse.js',
                 dest: disDir + '<%= pkg.name %>.parse.min.js'
@@ -108,10 +103,16 @@ module.exports = function (grunt) {
             base: {
                 files: [
                     {
-
-                        src: [ '*.html', 'themes/iframe.css', 'themes/default/dialogbase.css', 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**' ],
+                        src: [ 
+                            '*.html', 
+                            'themes/iframe.css', 
+                            'themes/default/dialogbase.css', 
+                            'themes/default/images/**', 
+                            'dialogs/**', 
+                            'lang/**', 
+                            'third-party/**' 
+                        ],
                         dest: disDir
-
                     }
                 ]
             },
@@ -123,26 +124,16 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            php: {
-
-                expand: true,
-                src: 'php/**',
-                dest: disDir
-
-            }
         },
         transcoding: {
-
             options: {
                 charset: encode
             },
-            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.json', disDir + '**/*.jsp', disDir + '**/*.asp']
-
+            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.json']
         },
         replace: {
-
             fileEncode: {
-                src: [ disDir + '**/*.html', disDir + 'dialogs/**/*.js', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.ashx', disDir + '**/*.asp' ],
+                src: [ disDir + '**/*.html', disDir + 'dialogs/**/*.js', disDir + '**/*.css' ],
                 overwrite: true,
                 replacements: [
                     {
@@ -170,7 +161,6 @@ module.exports = function (grunt) {
         clean: {
             build: {
                 src: [
-                    disDir + "jsp/src",
                     disDir + "*/upload",
                     disDir + ".DS_Store",
                     disDir + "**/.DS_Store",
@@ -191,48 +181,20 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('default', 'UEditor build', function () {
-
-        var tasks = [ 'concat', 'cssmin', 'uglify', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
-
-        if (encode === 'gbk') {
-            tasks.push('replace:fileEncode');
-            if (server === 'asp') {
-                tasks.push('replace:gbkasp');
-            }
-        }
-
+        var tasks = [ 'concat', 'cssmin', 'uglify', 'copy:base', 'copy:demo', 'replace:demo', 'clean' ];
         tasks.push('transcoding');
-
         //config修改
         updateConfigFile();
-
         grunt.task.run(tasks);
-
     });
-
-
     function updateConfigFile() {
-
         var filename = 'ueditor.config.js',
-            file = grunt.file.read(filename),
-            path = server + "/",
-            suffix = server === "net" ? ".ashx" : "." + server;
-
-        file = file.replace(/php\//ig, path).replace(/\.php/ig, suffix);
-
-        if (encode == 'gbk') {
-            file = file.replace(/utf-8/gi, 'gbk');
-        }
-
+            file = grunt.file.read(filename);
         //写入到dist
         if (grunt.file.write(disDir + filename, file)) {
-
             grunt.log.writeln('config file update success');
-
         } else {
             grunt.log.warn('config file update error');
         }
-
     }
-
 };
