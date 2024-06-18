@@ -350,14 +350,6 @@ UE.plugins['contextmenu'] = function () {
                 {
                     label:lang.insertparagraphafter,
                     cmdName:'insertparagraph'
-                },
-                {
-                    label:lang['copy'],
-                    cmdName:'copy'
-                },
-                {
-                    label:lang['paste'],
-                    cmdName:'paste'
                 }
             ];
     if ( !items.length ) {

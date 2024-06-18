@@ -54,7 +54,6 @@
             'plugins/wordimage.js',
             'plugins/dragdrop.js',
             'plugins/undo.js',
-            'plugins/copy.js',
             'plugins/paste.js',
             'plugins/puretxtpaste.js',
             'plugins/list.js',
