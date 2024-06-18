@@ -29,7 +29,7 @@
 
 这是第四次 再次整理富文本编辑器了：需要功能贴合，容易定制，样式自由并不简单
 
-这里留个疑问：[请看ISSUE](https://github.com/youfeed/youloge.edotor/issues/1)
+这里留个疑问：[请看ISSUE](https://github.com/youfeed/youloge.editor/issues)
 
 :::
 
